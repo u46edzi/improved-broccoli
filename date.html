@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Date Widget</title>
+        <link
+            href="https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Merriweather:300,300italic,regular,italic,700,700italic,900,900italic"
+            rel="stylesheet"
+        />
+        <style>
+            #lbl {
+                display: flex;
+                font-family: "Poppins", sans-serif;
+                font-size: 18pt;
+                color: #d4d4d4;
+                padding: 5px;
+                justify-content: left;
+                line-height: 1.5;
+                flex-direction: row;
+            }
+
+            #container {
+                display: flex;
+                align-items: flex-start;
+            }
+
+            #date {
+                font-family: "Merriweather", serif;
+                font-size: 16pt;
+            }
+
+            #time {
+                font-family: "Poppins", sans-serif;
+                font-size: 18pt;
+            }
+
+            body {
+                background-color: #191919;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="lbl"></div>
+    </body>
+
+    <script>
+        var weekday = new Array(7);
+        weekday[0] = "sunday";
+        weekday[1] = "monday";
+        weekday[2] = "tuesday";
+        weekday[3] = "wednesday";
+        weekday[4] = "thursday";
+        weekday[5] = "friday";
+        weekday[6] = "saturday";
+
+        const months = [
+            "january",
+            "february",
+            "march",
+            "april",
+            "may",
+            "june",
+            "july",
+            "august",
+            "september",
+            "october",
+            "november",
+            "december",
+        ];
+
+        function lbl() {
+            var now = new Date();
+            var hrs = now.getHours();
+            var min = now.getMinutes();
+            var num = now.getDate();
+            var mon = now.getMonth();
+            var yr = now.getFullYear();
+            var day = weekday[now.getDay()];
+            var suffix = "th";
+            if (num == 1 || num == 21 || num == 31) {
+                suffix = "st";
+            } else if (num == 2 || num == 22) {
+                suffix = "nd";
+            } else if (num == 3 || num == 23) {
+                suffix = "rd";
+            }
+
+            var time = `${zeros(twelveHour(hrs))}:${zeros(min)}${
+                hrs > 12 ? " pm" : " am"
+            }`;
+            var date = `It's ${day}, ${months[mon]} ${num}${suffix}, ${yr}`;
+
+            var greet;
+            if (hrs >= 5 && hrs <= 12) greet = "Good morning, Axel  ";
+            else if (hrs >= 12 && hrs <= 17) greet = "Good afternoon, Axel  ";
+            else if (hrs >= 17 && hrs <= 22) greet = "Good evening, Axel  ";
+            else greet = "Good night, Axel  ";
+
+            document.getElementById("lbl").innerHTML = `
+            <div class="container">
+                <div class="greeting"> ${greet} </div>
+                <div id="date"> ${date} </div><br>
+                <div id="time"> ${time} </div>
+            <div/>
+        `;
+        }
+
+        function zeros(number) {
+            if (number < 10) {
+                number = "0" + number;
+            }
+            return number;
+        }
+
+        function twelveHour(hour) {
+            if (hour > 12) {
+                return (hour -= 12);
+            } else if (hour === 0) {
+                return (hour = 12);
+            } else {
+                return hour;
+            }
+        }
+
+        function dateTime() {
+            lbl();
+            setTimeout(dateTime, 500);
+        }
+
+        dateTime();
+    </script>
+</html>
